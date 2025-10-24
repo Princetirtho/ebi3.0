@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EBI 3.0 - Bangla 2nd Paper | Tiba Education</title>
+  <link rel="icon" type="image/png" href="../logo.png">
+
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G95KDJF46X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G95KDJF46X');
+</script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<style>
+  :root {
+    --bg-light: #f0f4f8;
+    --bg-dark: #1e1e1e;
+    --text-light: #333;
+    --text-dark: #f9f9f9;
+    --nav-bg: #0066cc;
+    --nav-bg-dark: #003366;
+  }
+
+  html, body {
+    margin: 0;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s, color 0.3s;
+    min-height: 100vh;
+  }
+
+  body.dark {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+  }
+
+  nav {
+    background-color: var(--nav-bg);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  body.dark nav {
+    background-color: var(--nav-bg-dark);
+  }
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .menu a,
+  .dark-toggle {
+    text-decoration: none;
+    font-size: 17px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    background-color: white;
+    color: #003366;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .menu a:hover,
+  .dark-toggle:hover {
+    background-color: #FFD166;
+    color: black;
+    transform: scale(1.05);
+  }
+
+  body.dark .menu a,
+  body.dark .dark-toggle {
+    background-color: #2e2e2e;
+    color: white;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+  }
+
+  body.dark .menu a:hover,
+  body.dark .dark-toggle:hover {
+    background-color: #444;
+    color: #FFD166;
+  }
+
+  .hamburger {
+    display: none;
+    font-size: 26px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+  }
+
+  @media (max-width: 780px) {
+    .hamburger {
+      display: block;
+    }
+
+    .menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 65px;
+      left: 0;
+      width: 100%;
+      background-color: #fdf0d5;
+      padding: 15px 0;
+      z-index: 2;
+    }
+
+    body.dark .menu {
+      background-color: #2a2a2a;
+    }
+
+    .menu a,
+    .dark-toggle {
+      width: 90%;
+      margin: 8px auto;
+    }
+
+    .menu.show {
+      display: flex;
+    }
+  }
+
+  .class-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    padding: 30px 0 10px;
+    color: #003366;
+  }
+
+  body.dark .class-title {
+    color: #FFD166;
+  }
+
+  .course-info {
+    text-align: center;
+    padding: 0 20px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Chapter Navigation Table */
+  .chapter-nav {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 0 20px;
+  }
+
+  .chapter-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  body.dark .chapter-table {
+    background: #2e2e2e;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+  }
+
+  .chapter-table th {
+    background: #0066cc;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 18px;
+  }
+
+  body.dark .chapter-table th {
+    background: #003366;
+  }
+
+  .chapter-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  body.dark .chapter-table td {
+    border-bottom: 1px solid #444;
+  }
+
+  .chapter-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .chapter-table tr:hover {
+    background: #f5f5f5;
+  }
+
+  body.dark .chapter-table tr:hover {
+    background: #3a3a3a;
+  }
+
+  .chapter-name {
+    font-weight: bold;
+    color: #003366;
+    font-size: 16px;
+  }
+
+  body.dark .chapter-name {
+    color: #FFD166;
+  }
+
+  .chapter-content {
+    color: #666;
+    font-size: 14px;
+  }
+
+  body.dark .chapter-content {
+    color: #ccc;
+  }
+
+  .chapter-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .status-completed {
+    background: #4caf50;
+    color: white;
+  }
+
+  .status-pending {
+    background: #ff9800;
+    color: white;
+  }
+
+  .chapter-link {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+
+  .chapter-link:hover {
+    background: #e3f2fd;
+  }
+
+  body.dark .chapter-link {
+    color: #90caf9;
+  }
+
+  body.dark .chapter-link:hover {
+    background: #1a237e;
+  }
+
+  /* Video Container Styles */
+  .video-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .video-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+  }
+
+  body.dark .video-card {
+    background: #2e2e2e;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+  }
+
+  .video-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .video-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #003366;
+    font-size: 16px;
+  }
+
+  body.dark .video-title {
+    color: #FFD166;
+  }
+
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .video-player {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+  }
+
+  .resources {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .resource-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: #e3f2fd;
+    color: #0066cc;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.3s;
+  }
+
+  body.dark .resource-link {
+    background: #1a237e;
+    color: #90caf9;
+  }
+
+  .resource-link:hover {
+    background: #bbdefb;
+  }
+
+  body.dark .resource-link:hover {
+    background: #283593;
+  }
+
+  .chapter-section {
+    margin: 30px 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  body.dark .chapter-section {
+    background: #2e2e2e;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+  }
+
+  .chapter-title {
+    color: #003366;
+    border-bottom: 2px solid #0066cc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+
+  body.dark .chapter-title {
+    color: #FFD166;
+    border-bottom-color: #FFD166;
+  }
+
+  footer {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 15px;
+    margin-top: auto;
+  }
+
+  footer a {
+    color: #FFD700;
+    text-decoration: none;
+  }
+
+  #active{
+    background-color: #FFD166;
+    color: black;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">📘 Tiba Education</div>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">☰</button>
+    <div class="menu" id="menu">
+      <a href="../index.html">Home</a>
+      <a href="../about.html">About</a>
+      <a href="../class.html" id="active">Class</a>
+      <a href="../contact.html">Contact</a>
+      <button class="dark-toggle" id="darkToggleBtn" onclick="toggleDark()">🌙 Dark Mode: OFF</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="class-title">ব্যাকরণ শ্রেণীবিভাগ - EBI 3.0 - Bangla 2nd Paper</div>
+  
+  <div class="course-info">
+    <p><strong>কোর্স:</strong> EBI 3.0 | English, Bangla and ICT | HSC 2026/27</p>
+    <p><strong>বিষয়:</strong> Bangla 2nd Paper - ব্যাকরণ শ্রেণীবিভাগ</p>
+    <p><strong>শিক্ষক:</strong> Shakib Hasan</p>
+  </div>
+
+  <!-- Chapter 1: ব্যাকরণিক শব্দশ্রেণী -->
+  <div class="chapter-section" id="chapter-bakaranik-shobdo">
+    <h2 class="chapter-title">ব্যাকরণিক শব্দশ্রেণী</h2>
+    <div class="video-container">
+      
+      <!-- Video 1 -->
+      <div class="video-card">
+        <div class="video-title">ক্লাস ১ | ব্যাকরণিক শব্দশ্রেণী ১ম পর্ব</div>
+        <div class="video-wrapper">
+          <iframe 
+            class="video-player"
+            src="https://www.youtube.com/embed/ZxWth8GRu3k?enablejsapi=1&controls=1&modestbranding=1&rel=0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="resources">
+          <a href="https://drive.google.com/drive/folders/1H6OtQ_BarbTEU6L9A1UFI1iReQ_PndTe?usp=drive_link" class="resource-link" target="_blank">
+            📁 লেকচার শীট
+          </a>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card">
+        <div class="video-title">ক্লাস ২ | বিশেষ্য পদ</div>
+        <div class="video-wrapper">
+          <iframe 
+            class="video-player"
+            src="https://www.youtube.com/embed/lRHuPGo6_MA?enablejsapi=1&controls=1&modestbranding=1&rel=0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="resources">
+          <a href="https://drive.google.com/drive/folders/1H6OtQ_BarbTEU6L9A1UFI1iReQ_PndTe?usp=drive_link" class="resource-link" target="_blank">
+            📁 লেকচার শীট
+          </a>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card">
+        <div class="video-title">ক্লাস ৩ | সর্বনাম ও বিশেষণ</div>
+        <div class="video-wrapper">
+          <iframe 
+            class="video-player"
+            src="https://www.youtube.com/embed/mOiC4FIiciU?enablejsapi=1&controls=1&modestbranding=1&rel=0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="resources">
+          <a href="https://drive.google.com/file/d/1awacBxuVn3U2vcrF78ffxUFciSImUuQi/view?usp=drive_link" class="resource-link" target="_blank">
+            📁 লেকচার শীট
+          </a>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-card">
+        <div class="video-title">ক্লাস ৪ | ক্রিয়া পদ</div>
+        <div class="video-wrapper">
+          <iframe 
+            class="video-player"
+            src="https://www.youtube.com/embed/-SJV2LxM_b0?enablejsapi=1&controls=1&modestbranding=1&rel=0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="resources">
+          <a href="https://drive.google.com/drive/folders/1H6OtQ_BarbTEU6L9A1UFI1iReQ_PndTe?usp=drive_link" class="resource-link" target="_blank">
+            📁 লেকচার শীট
+          </a>
+        </div>
+      </div>
+
+      <!-- Video 5 -->
+      <div class="video-card">
+        <div class="video-title">ক্লাস ৫ | ক্রিয়াবিশেষণ, অনুসর্গ, যোজক এবং আবেগ শব্দ | সালভ ক্লাস</div>
+        <div class="video-wrapper">
+          <iframe 
+            class="video-player"
+            src="https://www.youtube.com/embed/JGGurBJqkx4?enablejsapi=1&controls=1&modestbranding=1&rel=0"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="resources">
+          <a href="https://drive.google.com/drive/folders/1H6OtQ_BarbTEU6L9A1UFI1iReQ_PndTe?usp=drive_link" class="resource-link" target="_blank">
+            📁 লেকচার শীট
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>📧 যোগাযোগ: <a href="mailto:tirthochakroborty04@gmail.com">tirthochakroborty04@gmail.com</a></p>
+    <p>📞 মোবাইল: 01304218750</p>
+    <p>🌐 ফেসবুক: <a href="https://facebook.com/TibaEducation">facebook.com/TibaEducation</a></p>
+    <p style="margin-top: 10px;">© 2025 <strong>Tiba Education</strong> — সমস্ত অধিকার সংরক্ষিত।</p>
+  </footer>
+
+  <!-- Script -->
+     <script src="firebase-config.js"></script>  <!-- একই folder এ -->
+  <script>
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            window.location.href = 'login.html';  // একই folder এ
+        }
+    });
+  </script>
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      const hamburger = document.getElementById('hamburgerBtn');
+      menu.classList.toggle('show');
+      hamburger.textContent = menu.classList.contains('show') ? '✖' : '☰';
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      const btn = document.getElementById('darkToggleBtn');
+      const isDark = document.body.classList.contains('dark');
+      btn.textContent = isDark ? '🌙 Dark Mode: ON' : '🌙 Dark Mode: OFF';
+      
+      localStorage.setItem('darkMode', isDark);
+    }
+
+    // Load dark mode preference on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const darkMode = localStorage.getItem('darkMode') === 'true';
+      if (darkMode) {
+        document.body.classList.add('dark');
+        document.getElementById('darkToggleBtn').textContent = '🌙 Dark Mode: ON';
+      }
+    });
+
+    // Smooth scroll for chapter links
+    document.querySelectorAll('.chapter-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Simple security - Block right-click on videos
+    document.querySelectorAll('.video-wrapper').forEach(wrapper => {
+      wrapper.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+      });
+    });
+
+    // Block YouTube logo clicks in iframes
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('a') && e.target.closest('a').href.includes('youtube.com')) {
+        e.preventDefault();
+      }
+    });
+  </script>
+
+</body>
+</html>

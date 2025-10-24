@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home | Tiba Education</title>
+
+  <link rel="icon" type="image/png" href="logo.png">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G95KDJF46X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G95KDJF46X');
+  </script>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G95KDJF46X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G95KDJF46X');
+</script>
+
+<style>
+  :root {
+    --bg-light: #f0f4f8;
+    --bg-dark: #1e1e1e;
+    --text-light: #333;
+    --text-dark: #f9f9f9;
+    --nav-bg: #0066cc;
+    --nav-bg-dark: #003366;
+  }
+
+  html, body {
+    margin: 0;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s, color 0.3s;
+    min-height: 100vh;
+  }
+
+  body.dark {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+  }
+
+  nav {
+    background-color: var(--nav-bg);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  body.dark nav {
+    background-color: var(--nav-bg-dark);
+  }
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .menu a,
+  .dark-toggle {
+    text-decoration: none;
+    font-size: 17px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    background-color: white;
+    color: #003366;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .menu a:hover,
+  .dark-toggle:hover {
+    background-color: #FFD166;
+    color: black;
+    transform: scale(1.05);
+  }
+
+  body.dark .menu a,
+  body.dark .dark-toggle {
+    background-color: #2e2e2e;
+    color: white;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+  }
+
+  body.dark .menu a:hover,
+  body.dark .dark-toggle:hover {
+    background-color: #444;
+    color: #FFD166;
+  }
+
+  .hamburger {
+    display: none;
+    font-size: 26px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+  }
+
+  @media (max-width: 780px) {
+    .hamburger {
+      display: block;
+    }
+
+    .menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 65px;
+      left: 0;
+      width: 100%;
+      background-color: #fdf0d5;
+      padding: 15px 0;
+      z-index: 2;
+    }
+
+    body.dark .menu {
+      background-color: #2a2a2a;
+    }
+
+    .menu a,
+    .dark-toggle {
+      width: 90%;
+      margin: 8px auto;
+    }
+
+    .menu.show {
+      display: flex;
+    }
+  }
+
+  footer {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 15px;
+    margin-top: auto;
+  }
+
+  footer a {
+    color: #FFD700;
+    text-decoration: none;
+  }
+  
+  section {
+      background-color: white;
+      margin: 20px;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      line-height: 1.7;
+      font-size: 18px;
+    }
+
+    body.dark section {
+      background-color: #2e2e2e;
+    }
+
+    h2 {
+      color: #003366;
+      font-size: 26px;
+      margin-bottom: 15px;
+    }
+    body.dark h2 { color: #FFD166; }
+
+    .class-card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .class-card {
+      background-color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 20px;
+      color: #003366;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+
+    .class-card:hover {
+      background-color: #FFD166;
+      color: black;
+      transform: scale(1.05);
+    }
+
+    body.dark .class-card {
+      background-color: #2e2e2e;
+      color: white;
+      box-shadow: 0 4px 10px rgba(255,255,255,0.1);
+    }
+
+    body.dark .class-card:hover {
+      background-color: #444;
+      color: #FFD166;
+    }
+
+    #active{
+        background-color: #FFD166;
+        color: black;
+    }
+    
+    /* New styles for enhanced content */
+    .hero-section {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #003366, #0066cc);
+      color: white;
+      margin: 0;
+      border-radius: 0;
+    }
+    
+    .hero-section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .hero-section p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background-color: #FFD166;
+      color: #003366;
+      padding: 12px 30px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+    
+    .cta-button:hover {
+      background-color: #ffc233;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+    
+    .feature-card {
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    
+    body.dark .feature-card {
+      background-color: #2e2e2e;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    
+    .feature-card h3 {
+      color: #003366;
+      margin-bottom: 15px;
+    }
+    
+    body.dark .feature-card h3 {
+      color: #FFD166;
+    }
+    
+    .subject-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .subject-item {
+      background-color: #f0f4f8;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    body.dark .subject-item {
+      background-color: #2a2a2a;
+    }
+    
+    .subject-item:hover {
+      background-color: #e1e8f0;
+      transform: scale(1.03);
+    }
+    
+    body.dark .subject-item:hover {
+      background-color: #3a3a3a;
+    }
+    
+    .testimonial-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    
+    .testimonial {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 300px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    body.dark .testimonial {
+      background-color: #2a2a2a;
+    }
+    
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+    
+    .testimonial-author {
+      font-weight: bold;
+      text-align: right;
+      color: #003366;
+    }
+    
+    body.dark .testimonial-author {
+      color: #FFD166;
+    }
+    
+    .stats-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #003366;
+      display: block;
+    }
+    
+    body.dark .stat-number {
+      color: #FFD166;
+    }
+    
+    .stat-label {
+      font-size: 1.1rem;
+      margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+  <!-- Navbar -->
+<nav>
+  <div class="logo">📘 Tiba Education</div>
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">☰</button>
+  <div class="menu" id="menu">
+    <a href="./index.html" id="active">Home</a>
+    <a href="./about.html">About</a>
+    <a href="./class.html">Class</a>
+    <a href="./contact.html">Contact</a>
+    <!-- লগআউট বাটন যোগ করুন -->
+    <button class="dark-toggle" onclick="logout()">🚪 Logout</button>
+    <button class="dark-toggle" id="darkToggleBtn" onclick="toggleDark()">🌙 Dark Mode: OFF</button>
+  </div>
+</nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <h1>ডিজিটাল বাংলাদেশের ডিজিটাল শিক্ষা প্ল্যাটফর্ম</h1>
+    <p>ক্লাস ৬ থেকে ১২ পর্যন্ত সকল বিষয়ের জন্য সম্পূর্ণ ফ্রি ও মানসম্মত শিক্ষা উপকরণ</p>
+    <a href="#class6" class="cta-button">এখনই শুরু করুন</a>
+  </section>
+
+  <!-- Class Section -->
+  <section id="class6">
+    <h2>📚 ক্লাস সেকশন</h2>
+    <p>নিচের ক্লাসগুলো থেকে আপনার ক্লাস নির্বাচন করে পড়াশোনা শুরু করুন:</p>
+    <div class="class-card-container">
+      <a href="./class11-12/class11-12.html" class="class-card">ক্লাস ১১-১২</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features">
+    <h2>🌟 আমাদের বিশেষ সুবিধাসমূহ</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📖</div>
+        <h3>অধ্যায়ভিত্তিক নোট</h3>
+        <p>প্রতিটি বিষয়ের জন্য অধ্যায়ভিত্তিক সাজানো নোট যা সহজে বুঝতে সাহায্য করে।</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧪</div>
+        <h3>ইন্টারেক্টিভ কুইজ</h3>
+        <p>জ্ঞান যাচাই করার জন্য প্রতিটি অধ্যায়ের শেষে ইন্টারেক্টিভ কুইজের ব্যবস্থা।</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>মডেল টেস্ট</h3>
+        <p>বোর্ড পরীক্ষার জন্য সম্পূর্ণ সিলেবাসের উপর মডেল টেস্টের সুবিধা।</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>পরীক্ষার প্রস্তুতি গাইড</h3>
+        <p>পরীক্ষায় ভালো ফলাফলের জন্য বিশেষ টিপস ও গাইডলাইন।</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subjects Section -->
+  <section id="subjects">
+    <h2>📝 আমাদের বিষয়সমূহ</h2>
+    <p>নিচের বিষয়গুলো থেকে আপনার পছন্দের বিষয় নির্বাচন করে পড়াশোনা শুরু করুন:</p>
+    <div class="subject-list">
+      <div class="subject-item">গণিত</div>
+      <div class="subject-item">ইংরেজি</div>
+      <div class="subject-item">বাংলা</div>
+      <div class="subject-item">বিজ্ঞান</div>
+      <div class="subject-item">সমাজ বিজ্ঞান</div>
+      <div class="subject-item">ধর্ম শিক্ষা</div>
+      <div class="subject-item">কম্পিউটার শিক্ষা</div>
+      <div class="subject-item">শারীরিক শিক্ষা</div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section id="stats">
+    <h2>📈 আমাদের অর্জন</h2>
+    <div class="stats-container">
+      <div class="stat-item">
+        <span class="stat-number">৫০০০+</span>
+        <span class="stat-label">সক্রিয় শিক্ষার্থী</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">২০০+</span>
+        <span class="stat-label">শিক্ষামূলক ভিডিও</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">১০০০+</span>
+        <span class="stat-label">কুইজ ও টেস্ট</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">৯৮%</span>
+        <span class="stat-label">সন্তুষ্ট শিক্ষার্থী</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials">
+    <h2>🎓 শিক্ষার্থীদের মতামত</h2>
+    <div class="testimonial-container">
+      <div class="testimonial">
+        <p class="testimonial-text">"Tiba Education এর মাধ্যমে আমি গণিতে অনেক দুর্বলতা কাটিয়ে উঠেছি। তাদের নোটগুলো খুব সহজবোধ্য।"</p>
+        <p class="testimonial-author">- রিয়া, ক্লাস ১০</p>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">"ইংরেজি গ্রামারে আমার ভীতি দূর করতে Tiba Education অনেক সাহায্য করেছে। কুইজগুলো খুব উপকারী।"</p>
+        <p class="testimonial-author">- আরাফাত, ক্লাস ৯</p>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">"বিজ্ঞান বিষয়ে Tiba Education এর ভিডিও লেকচারগুলো খুবই কার্যকরী। জটিল বিষয়গুলো সহজে বুঝতে পারি।"</p>
+        <p class="testimonial-author">- সুমাইয়া, ক্লাস ৮</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>🔍 আমাদের সম্পর্কে</h2>
+    <p>
+      আমরা একটি শিক্ষানুরাগী তরুণ টিম, যারা বিশ্বাস করি — শিক্ষা সবার জন্য সমান হওয়া উচিত। আমাদের লক্ষ্য হলো বাংলাভাষায় গঠিত একটি সহজ, আকর্ষণীয় এবং আধুনিক ওয়েবপ্ল্যাটফর্মের মাধ্যমে শিক্ষার্থীদের পাশে দাঁড়ানো।
+    </p>
+    <p>
+      শুধুমাত্র ভালো ফলাফলের জন্য নয়, বরং আত্মবিশ্বাসী ও সচেতন নাগরিক হিসেবে গড়ে তোলার জন্য Tiba Education একটি নির্ভরযোগ্য সহযাত্রী হতে চায়।
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>📧 যোগাযোগ: <a href="mailto:tirthochakroborty04@gmail.com">tirthochakroborty04@gmail.com</a></p>
+    <p>📞 মোবাইল: 01304218750</p>
+    <p>🌐 ফেসবুক: <a href="https://facebook.com/TibaEducation">facebook.com/TibaEducation</a></p>
+    <p style="margin-top: 10px;">© 2025 <strong>Tiba Education</strong> — সমস্ত অধিকার সংরক্ষিত।</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnG7WhZTCHPvz2sqS4KkPmZFOX9XxpttQ",
+        authDomain: "private-chat-550ab.firebaseapp.com",
+        databaseURL: "https://private-chat-550ab-default-rtdb.firebaseio.com",
+        projectId: "private-chat-550ab",
+        storageBucket: "private-chat-550ab.firebasestorage.app",
+        messagingSenderId: "108768473913",
+        appId: "1:108768473913:web:a57cc49c0103f57467eee8",
+        measurementId: "G-YJRLY8TXMT"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Auth Protection
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            window.location.href = 'class11-12/login.html';
+        }
+    });
+
+    // Logout function
+    function logout() {
+        auth.signOut().then(() => {
+            // Redirect happens automatically
+        });
+    }
+
+    // Your existing functions
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      const hamburger = document.getElementById('hamburgerBtn');
+      menu.classList.toggle('show');
+      hamburger.textContent = menu.classList.contains('show') ? '✖' : '☰';
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      const btn = document.getElementById('darkToggleBtn');
+      const isDark = document.body.classList.contains('dark');
+      btn.textContent = isDark ? '🌙 Dark Mode: ON' : '🌙 Dark Mode: OFF';
+    }
+  </script>
+
+</body>
+</html>

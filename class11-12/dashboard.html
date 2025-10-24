@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard | Tiba Education</title>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  
+  <style>
+    :root {
+      --bg-light: #f0f4f8;
+      --bg-dark: #1e1e1e;
+      --text-light: #333;
+      --text-dark: #f9f9f9;
+      --nav-bg: #0066cc;
+      --nav-bg-dark: #003366;
+      --card-bg: #ffffff;
+      --card-bg-dark: #2e2e2e;
+      --accent: #FFD166;
+      --accent-dark: #FFB347;
+      --success: #06d6a0;
+      --warning: #ffd166;
+      --info: #118ab2;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+      color: var(--text-light);
+      transition: all 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.dark {
+      background: linear-gradient(135deg, #1e1e1e 0%, #2d3748 100%);
+      color: var(--text-dark);
+    }
+
+    /* Navbar Styles */
+    nav {
+      background: linear-gradient(135deg, var(--nav-bg), #004a99);
+      color: white;
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    body.dark nav {
+      background: linear-gradient(135deg, var(--nav-bg-dark), #002244);
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu a,
+    .menu button {
+      text-decoration: none;
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-weight: 600;
+      border: 2px solid rgba(255,255,255,0.2);
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .menu a:hover,
+    .menu button:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 26px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: white;
+    }
+
+    @media (max-width: 780px) {
+      .hamburger {
+        display: block;
+      }
+
+      .menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 102, 204, 0.95);
+        padding: 20px 0;
+        z-index: 2;
+        backdrop-filter: blur(20px);
+      }
+
+      body.dark .menu {
+        background: rgba(0, 51, 102, 0.95);
+      }
+
+      .menu a,
+      .menu button {
+        width: 90%;
+        margin: 8px auto;
+        background: rgba(255,255,255,0.1);
+      }
+
+      .menu.show {
+        display: flex;
+      }
+    }
+
+    /* Dashboard Container */
+    .dashboard-container {
+      flex: 1;
+      padding: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Welcome Banner */
+    .welcome-banner {
+      background: linear-gradient(135deg, #0066cc, #0099ff);
+      color: white;
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 30px rgba(0,102,204,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+
+    body.dark .welcome-banner {
+      background: linear-gradient(135deg, #003366, #0066cc);
+    }
+
+    .welcome-banner h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .welcome-banner p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    }
+
+    body.dark .stat-card {
+      background: var(--card-bg-dark);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .stat-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      background: linear-gradient(135deg, #0066cc, #0099ff);
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .stat-content {
+      flex: 1;
+    }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #003366;
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    body.dark .stat-number {
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    body.dark .stat-label {
+      color: #ccc;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      color: #003366;
+      margin-bottom: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    body.dark .section-title {
+      color: var(--accent);
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .action-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border: 2px solid transparent;
+    }
+
+    .action-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      border-color: #0066cc;
+    }
+
+    body.dark .action-card {
+      background: var(--card-bg-dark);
+      color: var(--text-dark);
+    }
+
+    .action-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .action-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #003366;
+      margin-bottom: 8px;
+    }
+
+    body.dark .action-title {
+      color: var(--accent);
+    }
+
+    .action-desc {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    body.dark .action-desc {
+      color: #ccc;
+    }
+
+    /* Class Cards */
+    .class-section {
+      margin-bottom: 30px;
+    }
+
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .class-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .class-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+    }
+
+    body.dark .class-card {
+      background: var(--card-bg-dark);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .class-header {
+      padding: 25px;
+      background: linear-gradient(135deg, #0066cc, #0099ff);
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    body.dark .class-header {
+      background: linear-gradient(135deg, #003366, #0066cc);
+    }
+
+    .class-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .class-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .class-body {
+      padding: 25px;
+    }
+
+    .class-description {
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    body.dark .class-description {
+      color: #ccc;
+    }
+
+    .progress-container {
+      margin-bottom: 15px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: between;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    body.dark .progress-info {
+      color: #ccc;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    body.dark .progress-bar {
+      background: #444;
+    }
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--success), #04a380);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .class-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 15px;
+    }
+
+    body.dark .class-meta {
+      color: #ccc;
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #003366, #002244);
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 50px;
+    }
+
+    body.dark footer {
+      background: linear-gradient(135deg, #002244, #001933);
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #FFD700;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .copyright {
+      margin-top: 15px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">📘 Tiba Education</div>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">☰</button>
+    <div class="menu" id="menu">
+      <a href="../index.html">🏠 হোম পেজ</a>
+      <button onclick="logout()">🚪 লগআউট</button>
+      <button class="dark-toggle" id="darkToggleBtn" onclick="toggleDark()">🌙 ডার্ক মোড</button>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-container">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+      <h1>স্বাগতম, Admin! 👋</h1>
+      <p>Tiba Education ড্যাশবোর্ডে আপনাকে স্বাগতম। শিক্ষার যাত্রায় আমরা আপনার সাথে আছি।</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-content">
+          <div class="stat-number">১৫+</div>
+          <div class="stat-label">মোট কোর্স</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👨‍🎓</div>
+        <div class="stat-content">
+          <div class="stat-number">৫০০+</div>
+          <div class="stat-label">সক্রিয় শিক্ষার্থী</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-content">
+          <div class="stat-number">৯৮%</div>
+          <div class="stat-label">সন্তুষ্টির হার</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📈</div>
+        <div class="stat-content">
+          <div class="stat-number">৮৫%</div>
+          <div class="stat-label">সাফল্যের হার</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h2 class="section-title">⚡ দ্রুত একশন</h2>
+      <div class="actions-grid">
+        <a href="#" class="action-card">
+          <span class="action-icon">📖</span>
+          <div class="action-title">নতুন কোর্স</div>
+          <div class="action-desc">নতুন কোর্স তৈরি করুন</div>
+        </a>
+        <a href="#" class="action-card">
+          <span class="action-icon">👨‍🏫</span>
+          <div class="action-title">শিক্ষার্থী</div>
+          <div class="action-desc">শিক্ষার্থী ম্যানেজ করুন</div>
+        </a>
+        <a href="#" class="action-card">
+          <span class="action-icon">📊</span>
+          <div class="action-title">রিপোর্ট</div>
+          <div class="action-desc">বিস্তারিত রিপোর্ট দেখুন</div>
+        </a>
+        <a href="#" class="action-card">
+          <span class="action-icon">⚙️</span>
+          <div class="action-title">সেটিংস</div>
+          <div class="action-desc">সিস্টেম সেটিংস</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Class Sections -->
+    <div class="class-section">
+      <h2 class="section-title">🎓 ক্লাস সেকশন</h2>
+      <div class="class-grid">
+        <!-- Class 11-12 -->
+        <a href="#" class="class-card">
+          <div class="class-header">
+            <div class="class-icon">🔬</div>
+            <div class="class-title">ক্লাস ১১-১২</div>
+          </div>
+          <div class="class-body">
+            <div class="class-description">
+              উচ্চ মাধ্যমিক বিজ্ঞান বিভাগের সকল বিষয় - পদার্থবিজ্ঞান, রসায়ন, জীববিজ্ঞান এবং গণিত
+            </div>
+            <div class="progress-container">
+              <div class="progress-info">
+                <span>সম্পূর্ণতা</span>
+                <span>৭৫%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress" style="width: 75%"></div>
+              </div>
+            </div>
+            <div class="class-meta">
+              <span>📚 ৮টি বিষয়</span>
+              <span>⏱️ ১২০+ ঘন্টা</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Class 9-10 -->
+        <a href="#" class="class-card">
+          <div class="class-header">
+            <div class="class-icon">📚</div>
+            <div class="class-title">ক্লাস ৯-১০</div>
+          </div>
+          <div class="class-body">
+            <div class="class-description">
+              মাধ্যমিক পর্যায়ের সকল বিষয় - বাংলা, ইংরেজি, গণিত, বিজ্ঞান এবং সামাজিক বিজ্ঞান
+            </div>
+            <div class="progress-container">
+              <div class="progress-info">
+                <span>সম্পূর্ণতা</span>
+                <span>৬০%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress" style="width: 60%"></div>
+              </div>
+            </div>
+            <div class="class-meta">
+              <span>📚 ১০টি বিষয়</span>
+              <span>⏱️ ২০০+ ঘন্টা</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Class 6-8 -->
+        <a href="#" class="class-card">
+          <div class="class-header">
+            <div class="class-icon">📖</div>
+            <div class="class-title">ক্লাস ৬-৮</div>
+          </div>
+          <div class="class-body">
+            <div class="class-description">
+              জুনিয়র পর্যায়ের শিক্ষা উপকরণ - মৌলিক বিষয়গুলো সহজ ও আকর্ষণীয়ভাবে উপস্থাপন
+            </div>
+            <div class="progress-container">
+              <div class="progress-info">
+                <span>সম্পূর্ণতা</span>
+                <span>৪৫%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress" style="width: 45%"></div>
+              </div>
+            </div>
+            <div class="class-meta">
+              <span>📚 ৬টি বিষয়</span>
+              <span>⏱️ ১৫০+ ঘন্টা</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="../index.html">হোম</a>
+        <a href="#">আমাদের সম্পর্কে</a>
+        <a href="#">যোগাযোগ</a>
+        <a href="#">গোপনীয়তা নীতি</a>
+      </div>
+      <p>📧 tirthochakroborty04@gmail.com | 📞 01304218750</p>
+      <p class="copyright">© ২০২৫ <strong>Tiba Education</strong> — সমস্ত অধিকার সংরক্ষিত</p>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDnG7WhZTCHPvz2sqS4KkPmZFOX9XxpttQ",
+      authDomain: "private-chat-550ab.firebaseapp.com",
+      databaseURL: "https://private-chat-550ab-default-rtdb.firebaseio.com",
+      projectId: "private-chat-550ab",
+      storageBucket: "private-chat-550ab.firebasestorage.app",
+      messagingSenderId: "108768473913",
+      appId: "1:108768473913:web:a57cc49c0103f57467eee8",
+      measurementId: "G-YJRLY8TXMT"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Auth Protection
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = 'login.html';
+      } else {
+        // Update welcome message with user email
+        const welcomeBanner = document.querySelector('.welcome-banner h1');
+        welcomeBanner.innerHTML = `স্বাগতম, ${user.email.split('@')[0]}! 👋`;
+      }
+    });
+
+    // Logout function
+    function logout() {
+      auth.signOut().then(() => {
+        console.log('User logged out successfully');
+      }).catch((error) => {
+        console.error('Logout error:', error);
+      });
+    }
+
+    // Menu toggle function
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      const hamburger = document.getElementById('hamburgerBtn');
+      menu.classList.toggle('show');
+      hamburger.textContent = menu.classList.contains('show') ? '✖' : '☰';
+    }
+
+    // Dark mode toggle function
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      const btn = document.getElementById('darkToggleBtn');
+      const isDark = document.body.classList.contains('dark');
+      btn.textContent = isDark ? '🌙 ডার্ক মোড' : '☀️ লাইট মোড';
+      
+      // Save theme preference
+      localStorage.setItem('darkMode', isDark);
+    }
+
+    // Check for saved theme preference
+    document.addEventListener('DOMContentLoaded', () => {
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      if (isDarkMode) {
+        document.body.classList.add('dark');
+        document.getElementById('darkToggleBtn').textContent = '🌙 ডার্ক মোড';
+      }
+    });
+  </script>
+</body>
+</html>

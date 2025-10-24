@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | Tiba Education</title>
+
+  <link rel="icon" type="image/png" href="logo.png">
+    
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G95KDJF46X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G95KDJF46X');
+  </script>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G95KDJF46X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G95KDJF46X');
+</script>
+
+<style>
+  :root {
+    --bg-light: #f0f4f8;
+    --bg-dark: #1e1e1e;
+    --text-light: #333;
+    --text-dark: #f9f9f9;
+    --nav-bg: #0066cc;
+    --nav-bg-dark: #003366;
+  }
+
+  html, body {
+    margin: 0;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s, color 0.3s;
+    min-height: 100vh;
+  }
+
+  body.dark {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+  }
+
+  nav {
+    background-color: var(--nav-bg);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  body.dark nav {
+    background-color: var(--nav-bg-dark);
+  }
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .menu a,
+  .dark-toggle {
+    text-decoration: none;
+    font-size: 17px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    background-color: white;
+    color: #003366;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .menu a:hover,
+  .dark-toggle:hover {
+    background-color: #FFD166;
+    color: black;
+    transform: scale(1.05);
+  }
+
+  body.dark .menu a,
+  body.dark .dark-toggle {
+    background-color: #2e2e2e;
+    color: white;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+  }
+
+  body.dark .menu a:hover,
+  body.dark .dark-toggle:hover {
+    background-color: #444;
+    color: #FFD166;
+  }
+
+  .hamburger {
+    display: none;
+    font-size: 26px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+  }
+
+  @media (max-width: 780px) {
+    .hamburger {
+      display: block;
+    }
+
+    .menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 65px;
+      left: 0;
+      width: 100%;
+      background-color: #fdf0d5;
+      padding: 15px 0;
+      z-index: 2;
+    }
+
+    body.dark .menu {
+      background-color: #2a2a2a;
+    }
+
+    .menu a,
+    .dark-toggle {
+      width: 90%;
+      margin: 8px auto;
+    }
+
+    .menu.show {
+      display: flex;
+    }
+  }
+
+  footer {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 15px;
+    margin-top: auto;
+  }
+
+  footer a {
+    color: #FFD700;
+    text-decoration: none;
+  }
+  
+  section {
+      background-color: white;
+      margin: 20px;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      line-height: 1.7;
+      font-size: 18px;
+    }
+
+    body.dark section {
+      background-color: #2e2e2e;
+    }
+
+    h2 {
+      color: #003366;
+      font-size: 26px;
+      margin-bottom: 15px;
+    }
+    body.dark h2 { color: #FFD166; }
+
+    .class-card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .class-card {
+      background-color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 20px;
+      color: #003366;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+
+    .class-card:hover {
+      background-color: #FFD166;
+      color: black;
+      transform: scale(1.05);
+    }
+
+    body.dark .class-card {
+      background-color: #2e2e2e;
+      color: white;
+      box-shadow: 0 4px 10px rgba(255,255,255,0.1);
+    }
+
+    body.dark .class-card:hover {
+      background-color: #444;
+      color: #FFD166;
+    }
+
+    .profile-img {
+      display: block;
+      width:250px;
+      height:300px ;
+      border-radius: 50%;
+      margin: 0 auto 20px auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border:none;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-img:hover {
+      transform: scale(1.05);
+    }
+
+    body.dark .profile-img {
+      border-color: #FFD166;
+    }
+
+    #active{
+        background-color: #FFD166;
+        color: black;
+    }
+    
+    /* New styles for enhanced content */
+    .mission-vision {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+    
+    .mission-card, .vision-card {
+      background-color: #f0f4f8;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    
+    body.dark .mission-card, 
+    body.dark .vision-card {
+      background-color: #2a2a2a;
+    }
+    
+    .mission-card:hover, .vision-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .mission-card h3, .vision-card h3 {
+      color: #003366;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+    
+    body.dark .mission-card h3, 
+    body.dark .vision-card h3 {
+      color: #FFD166;
+    }
+    
+    .values-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    
+    .value-item {
+      background-color: #f0f4f8;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    body.dark .value-item {
+      background-color: #2a2a2a;
+    }
+    
+    .value-item:hover {
+      background-color: #e1e8f0;
+      transform: scale(1.03);
+    }
+    
+    body.dark .value-item:hover {
+      background-color: #3a3a3a;
+    }
+    
+    .value-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+    
+    .team-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    
+    .team-member {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 250px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    body.dark .team-member {
+      background-color: #2a2a2a;
+    }
+    
+    .member-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .member-name {
+      font-weight: bold;
+      color: #003366;
+      margin-bottom: 5px;
+    }
+    
+    body.dark .member-name {
+      color: #FFD166;
+    }
+    
+    .member-role {
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    
+    .stats-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #003366;
+      display: block;
+    }
+    
+    body.dark .stat-number {
+      color: #FFD166;
+    }
+    
+    .stat-label {
+      font-size: 1.1rem;
+      margin-top: 10px;
+    }
+    
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 30px auto;
+    }
+    
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      background-color: #003366;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -3px;
+    }
+    
+    body.dark .timeline::after {
+      background-color: #FFD166;
+    }
+    
+    .timeline-item {
+      padding: 10px 40px;
+      position: relative;
+      width: 50%;
+      box-sizing: border-box;
+    }
+    
+    .timeline-item:nth-child(odd) {
+      left: 0;
+    }
+    
+    .timeline-item:nth-child(even) {
+      left: 50%;
+    }
+    
+    .timeline-content {
+      padding: 20px;
+      background-color: #f0f4f8;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    body.dark .timeline-content {
+      background-color: #2a2a2a;
+    }
+    
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #003366;
+      border-radius: 50%;
+      top: 15px;
+      z-index: 1;
+    }
+    
+    body.dark .timeline-item::after {
+      background-color: #FFD166;
+    }
+    
+    .timeline-item:nth-child(odd)::after {
+      right: -10px;
+    }
+    
+    .timeline-item:nth-child(even)::after {
+      left: -10px;
+    }
+</style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">📘 Tiba Education</div>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">☰</button>
+    <div class="menu" id="menu">
+      <a href="./index.html">Home</a>
+      <a href="./about.html" id="active">About</a>
+      <a href="./class.html">Class</a>
+      <a href="./contact.html">Contact</a>
+      <button class="dark-toggle" id="darkToggleBtn" onclick="toggleDark()">🌙 Dark Mode: OFF</button>
+    </div>
+  </nav>
+
+  <!-- Founder Section -->
+  <section id="founder">
+    <h2 style="text-align: center;">প্রতিষ্ঠাতা পরিচিতি</h2>
+    <img src="tirtho.jpg" alt="Tirtho Chakroborty" class="profile-img">
+    <h2>আমার সম্পর্কে</h2>
+    <p style="max-width: 700px; margin: auto; font-size: 17px;">
+      আমি <strong>তীর্থ চক্রবর্ত্তী</strong>। আমি Tiba Education-এর প্রতিষ্ঠাতা এবং একজন শিক্ষার্থী-বন্ধু। আমার লক্ষ্য হলো — বাংলাদেশের প্রত্যন্ত অঞ্চলের শিক্ষার্থীরাও যেন অনলাইনে সহজেই অধ্যায়ভিত্তিক শিক্ষাসমগ্রী পায়।
+      আমাদের প্ল্যাটফর্মে রয়েছে ক্লাস ৬ থেকে ১০ পর্যন্ত সকল বিষয়ের বিস্তারিত নোট, কুইজ এবং প্রশ্নোত্তর ব্যবস্থা একদম ফ্রি!
+    </p>
+    <p>
+      আমি বিশ্বাস করি যে শিক্ষা প্রতিটি শিশুর মৌলিক অধিকার এবং প্রযুক্তির মাধ্যমে আমরা এই অধিকারকে সবার দোরগোড়ায় পৌঁছে দিতে পারি। আমার ব্যক্তিগত অভিজ্ঞতা থেকেই আমি বুঝতে পেরেছি যে অনেক মেধাবী শিক্ষার্থী শুধুমাত্র সঠিক গাইডলাইনের অভাবে তাদের সক্ষমতা পুরোপুরি বিকশিত করতে পারে না।
+    </p>
+  </section>
+
+  <!-- About Tiba Education -->
+  <section id="about">
+    <h2>🔍 Tiba Education সম্পর্কে</h2>
+    <p>
+      Tiba Education একটি সম্পূর্ণ ফ্রি ও ডিজিটাল শিক্ষার প্ল্যাটফর্ম, যেখানে ক্লাস ৬ থেকে ১০ পর্যন্ত প্রতিটি বিষয়ের চ্যাপ্টারভিত্তিক সাজানো নোট, কুইজ, মডেল টেস্ট এবং এক্সাম প্রস্তুতির গাইড দেওয়া হয়।
+    </p>
+    <p>
+      শিক্ষার্থীরা ঘরে বসেই সঠিক ও নির্ভরযোগ্য রিসোর্স পেয়ে যাবে – যা স্কুল ও বোর্ড পরীক্ষার জন্য আদর্শ। এই ওয়েবসাইটটি তৈরি করা হয়েছে শিক্ষার্থীদের সময় ও মনোযোগকে গুরুত্ব দিয়ে।
+    </p>
+    <p>
+      আমরা শুধুমাত্র পাঠ্যবইয়ের সিলেবাসই নয়, বরং জীবন দক্ষতা, প্রযুক্তি জ্ঞান এবং সৃজনশীল চিন্তাভাবনার বিকাশেও গুরুত্ব দিয়ে থাকি। আমাদের লক্ষ্য শিক্ষার্থীদেরকে শুধু পরীক্ষায় ভালো ফলাফল করানো নয়, বরং তাদেরকে ভবিষ্যতের জন্য প্রস্তুত করা।
+    </p>
+  </section>
+
+  <!-- Mission & Vision -->
+  <section id="mission-vision">
+    <h2>🎯 আমাদের মিশন ও ভিশন</h2>
+    <div class="mission-vision">
+      <div class="mission-card">
+        <h3>🚀 আমাদের মিশন</h3>
+        <p>বাংলাদেশের প্রতিটি শিক্ষার্থীর কাছে মানসম্মত শিক্ষা উপকরণ বিনামূল্যে পৌঁছে দেওয়া। বিশেষ করে যারা শহর থেকে দূরে অবস্থান করে এবং ভালো শিক্ষা উপকরণের অভাবে পড়াশোনায় পিছিয়ে পড়ছে।</p>
+        <p>আমরা চাই প্রতিটি শিক্ষার্থী তার নিজের গতিতে, নিজের সময়ে এবং নিজের পছন্দের স্থানে পড়াশোনা করতে পারে।</p>
+      </div>
+      <div class="vision-card">
+        <h3>🔭 আমাদের ভিশন</h3>
+        <p>২০২৫ সালের মধ্যে বাংলাদেশের সবচেয়ে বড় অনলাইন শিক্ষা প্ল্যাটফর্ম হওয়া, যেখানে প্রতিমাসে ১ লক্ষেরও বেশি শিক্ষার্থী তাদের পড়াশোনার জন্য নিয়মিত ভিজিট করবে।</p>
+        <p>আমরা চাই Tiba Education শুধু একটি ওয়েবসাইট না হয়ে শিক্ষার্থীদের জন্য একটি সম্পূর্ণ শিক্ষা পরিবেশ হয়ে উঠুক।</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Values -->
+  <section id="values">
+    <h2>💎 আমাদের মূল্যবোধ</h2>
+    <div class="values-list">
+      <div class="value-item">
+        <span class="value-icon">🎓</span>
+        <h3>মানসম্মত শিক্ষা</h3>
+        <p>প্রতিটি কনটেন্ট বিশেষজ্ঞদের দ্বারা তৈরি এবং যাচাইকৃত</p>
+      </div>
+      <div class="value-item">
+        <span class="value-icon">🆓</span>
+        <h3>সম্পূর্ণ ফ্রি</h3>
+        <p>কোনো প্রকার ফি ছাড়াই সবকিছু অ্যাক্সেস করা যাবে</p>
+      </div>
+      <div class="value-item">
+        <span class="value-icon">📱</span>
+        <h3>সহজ অ্যাক্সেস</h3>
+        <p>যেকোনো ডিভাইস থেকে সহজেই অ্যাক্সেস করা যাবে</p>
+      </div>
+      <div class="value-item">
+        <span class="value-icon">🌍</span>
+        <h3>সবার জন্য শিক্ষা</h3>
+        <p>শহর ও গ্রামের সব শিক্ষার্থীর জন্য সমান সুযোগ</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Team -->
+  <section id="team">
+    <h2>👥 আমাদের টিম</h2>
+    <p>আমাদের টিমে রয়েছেন অভিজ্ঞ শিক্ষক, কনটেন্ট ডেভেলপার এবং টেকনোলজি বিশেষজ্ঞরা যারা সম্মিলিতভাবে কাজ করছেন শিক্ষার মানোন্নয়নের জন্য।</p>
+    <div class="team-container">
+      <div class="team-member">
+        <img src="https://via.placeholder.com/120" alt="Team Member" class="member-img">
+        <div class="member-name">ড. রহিমা খাতুন</div>
+        <div class="member-role">শিক্ষা উপদেষ্টা</div>
+        <p>১৫ বছরের শিক্ষকতা অভিজ্ঞতা</p>
+      </div>
+      <div class="team-member">
+        <img src="https://via.placeholder.com/120" alt="Team Member" class="member-img">
+        <div class="member-name">আহমেদ হাসান</div>
+        <div class="member-role">কনটেন্ট ডেভেলপার</div>
+        <p>বিষয় বিশেষজ্ঞ ও লেখক</p>
+      </div>
+      <div class="team-member">
+        <img src="https://via.placeholder.com/120" alt="Team Member" class="member-img">
+        <div class="member-name">সুমাইয়া আক্তার</div>
+        <div class="member-role">গ্রাফিক ডিজাইনার</div>
+        <p>শিক্ষামূলক কনটেন্ট ডিজাইনার</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Journey -->
+  <section id="journey">
+    <h2>🛣️ আমাদের যাত্রা</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>জানুয়ারি ২০২৩</h3>
+          <p>Tiba Education-এর যাত্রা শুরু। প্রথমে শুধুমাত্র ক্লাস ৯-১০ এর জন্য গণিত বিষয়ের নোট দিয়ে শুরু।</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>জুন ২০২৩</h3>
+          <p>৫০০০+ শিক্ষার্থী নিবন্ধন সম্পন্ন করে। বিজ্ঞান ও ইংরেজি বিষয় যুক্ত করা হয়।</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>ডিসেম্বর ২০২৩</h3>
+          <p>ক্লাস ৬-৮ এর সকল বিষয় যুক্ত করা হয়। মোবাইল অ্যাপ্লিকেশন লঞ্চ করা হয়।</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>মার্চ ২০২৪</h3>
+          <p>১০,০০০+ সক্রিয় ব্যবহারকারী অর্জন। ইন্টারেক্টিভ কুইজ সিস্টেম চালু করা হয়।</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>বর্তমান</h3>
+          <p>১৫,০০০+ নিবন্ধিত শিক্ষার্থী। মাসিক ৫০,০০০+ পেজ ভিউ। নতুন ফিচার ডেভেলপমেন্ট চলমান।</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics -->
+  <section id="stats">
+    <h2>📊 আমাদের অর্জন</h2>
+    <div class="stats-container">
+      <div class="stat-item">
+        <span class="stat-number">১৫,০০০+</span>
+        <span class="stat-label">নিবন্ধিত শিক্ষার্থী</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">৫০০+</span>
+        <span class="stat-label">শিক্ষামূলক ভিডিও</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">২,০০০+</span>
+        <span class="stat-label">কুইজ ও টেস্ট</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">৯৮%</span>
+        <span class="stat-label">সন্তুষ্ট শিক্ষার্থী</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Future Plans -->
+  <section id="future">
+    <h2>🚀 ভবিষ্যৎ পরিকল্পনা</h2>
+    <p>আমাদের ভবিষ্যৎ পরিকল্পনাগুলো নিম্নরূপ:</p>
+    <ul>
+      <li>ক্লাস ১১-১২ এর সকল বিষয়ের জন্য সম্পূর্ণ কনটেন্ট তৈরি করা</li>
+      <li>লাইভ ক্লাস এবং অনলাইন টিউটরিং সিস্টেম চালু করা</li>
+      <li>মোবাইল অ্যাপে অফলাইন মোড যুক্ত করা</li>
+      <li>বিশেষ চাহিদাসম্পন্ন শিক্ষার্থীদের জন্য উপযোগী কনটেন্ট তৈরি করা</li>
+      <li>প্রতিটি জেলায় Tiba Education ক্লাব প্রতিষ্ঠা করা</li>
+      <li>শিক্ষক প্রশিক্ষণ প্রোগ্রাম চালু করা</li>
+    </ul>
+    <p>আমরা বিশ্বাস করি যে সম্মিলিত প্রচেষ্টার মাধ্যমে আমরা বাংলাদেশের শিক্ষাব্যবস্থায় একটি ইতিবাচক পরিবর্তন আনতে পারব।</p>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>📧 যোগাযোগ: <a href="mailto:tirthochakroborty04@gmail.com">tirthochakroborty04@gmail.com</a></p>
+    <p>📞 মোবাইল: 01304218750</p>
+    <p>🌐 ফেসবুক: <a href="https://facebook.com/TibaEducation">facebook.com/TibaEducation</a></p>
+    <p style="margin-top: 10px;">© 2025 <strong>Tiba Education</strong> — সমস্ত অধিকার সংরক্ষিত।</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnG7WhZTCHPvz2sqS4KkPmZFOX9XxpttQ",
+        authDomain: "private-chat-550ab.firebaseapp.com",
+        databaseURL: "https://private-chat-550ab-default-rtdb.firebaseio.com",
+        projectId: "private-chat-550ab",
+        storageBucket: "private-chat-550ab.firebasestorage.app",
+        messagingSenderId: "108768473913",
+        appId: "1:108768473913:web:a57cc49c0103f57467eee8",
+        measurementId: "G-YJRLY8TXMT"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Auth Protection
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            window.location.href = 'class11-12/login.html';
+        }
+    });
+
+    // Logout function
+    function logout() {
+        auth.signOut().then(() => {
+            // Redirect happens automatically
+        });
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      const hamburger = document.getElementById('hamburgerBtn');
+      menu.classList.toggle('show');
+      hamburger.textContent = menu.classList.contains('show') ? '✖' : '☰';
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      const btn = document.getElementById('darkToggleBtn');
+      const isDark = document.body.classList.contains('dark');
+      btn.textContent = isDark ? '🌙 Dark Mode: ON' : '🌙 Dark Mode: OFF';
+    }
+  </script>
+
+</body>
+</html>

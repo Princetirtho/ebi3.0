@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Class | Tiba Education</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Google tag (gtag.js) -->
+    
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G95KDJF46X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G95KDJF46X');
+  </script>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G95KDJF46X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G95KDJF46X');
+</script>
+</script>
+
+<style>
+  :root {
+    --bg-light: #f0f4f8;
+    --bg-dark: #1e1e1e;
+    --text-light: #333;
+    --text-dark: #f9f9f9;
+    --nav-bg: #0066cc;
+    --nav-bg-dark: #003366;
+  }
+
+  html, body {
+    margin: 0;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s, color 0.3s;
+    min-height: 100vh;
+  }
+
+  body.dark {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+  }
+
+  nav {
+    background-color: var(--nav-bg);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  body.dark nav {
+    background-color: var(--nav-bg-dark);
+  }
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .menu a,
+  .dark-toggle {
+    text-decoration: none;
+    font-size: 17px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    background-color: white;
+    color: #003366;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    cursor: pointer;
+  }
+
+  .menu a:hover,
+  .dark-toggle:hover {
+    background-color: #FFD166;
+    color: black;
+    transform: scale(1.05);
+  }
+
+  body.dark .menu a,
+  body.dark .dark-toggle {
+    background-color: #2e2e2e;
+    color: white;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.1);
+  }
+
+  body.dark .menu a:hover,
+  body.dark .dark-toggle:hover {
+    background-color: #444;
+    color: #FFD166;
+  }
+
+  .hamburger {
+    display: none;
+    font-size: 26px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+  }
+
+  @media (max-width: 780px) {
+    .hamburger {
+      display: block;
+    }
+
+    .menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 65px;
+      left: 0;
+      width: 100%;
+      background-color: #fdf0d5;
+      padding: 15px 0;
+      z-index: 2;
+    }
+
+    body.dark .menu {
+      background-color: #2a2a2a;
+    }
+
+    .menu a,
+    .dark-toggle {
+      width: 90%;
+      margin: 8px auto;
+    }
+
+    .menu.show {
+      display: flex;
+    }
+  }
+
+
+
+
+
+
+  footer {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 15px;
+    margin-top: auto;
+  }
+
+  footer a {
+    color: #FFD700;
+    text-decoration: none;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  section {
+      background-color: white;
+      margin: 20px;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      line-height: 1.7;
+      font-size: 18px;
+    }
+
+    body.dark section {
+      background-color: #2e2e2e;
+    }
+
+    h2 {
+      color: #003366;
+      font-size: 26px;
+      margin-bottom: 15px;
+    }
+    body.dark h2 { color: #FFD166; }
+
+    .class-card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .class-card {
+      background-color: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 20px;
+      color: #003366;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+
+    .class-card:hover {
+      background-color: #FFD166;
+      color: black;
+      transform: scale(1.05);
+    }
+
+    body.dark .class-card {
+      background-color: #2e2e2e;
+      color: white;
+      box-shadow: 0 4px 10px rgba(255,255,255,0.1);
+    }
+
+    body.dark .class-card:hover {
+      background-color: #444;
+      color: #FFD166;
+    }
+
+
+#active{
+    background-color: #FFD166;
+    color: black;
+  
+}
+</style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">📘 Tiba Education</div>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">☰</button>
+    <div class="menu" id="menu">
+      <a href="./index.html">Home</a>
+      <a href="./about.html">About</a>
+      <a href="./class.html" id="active">Class</a>
+      <a href="./contact.html" >Contact</a>
+      <button class="dark-toggle" id="darkToggleBtn" onclick="toggleDark()">🌙 Dark Mode: OFF</button>
+    </div>
+  </nav>
+
+
+
+<section id="class6">
+    <h2>📚 ক্লাস সেকশন</h2>
+    <div class="class-card-container">
+      <a href="./class11-12/class11-12.html" class="class-card">ক্লাস ১১-১২</a>
+    </div>
+  </section>
+
+  <section id="home">
+    <h2>🎓 Tiba Education কী?</h2>
+    <p>Tiba Education বাংলাদেশের অন্যতম অনলাইন শিক্ষা প্ল্যাটফর্ম যেখানে ক্লাস ৬ থেকে শুরু করে উচ্চমাধ্যমিক পর্যন্ত প্রতিটি বিষয়ে বিস্তারিত অধ্যয়ন করা যায়। শিক্ষার্থীদের জন্য তৈরি করা হয়েছে নোট, ভিডিও লেকচার, মডেল টেস্ট এবং কুইজ সিস্টেম — সবকিছুই এক জায়গায়!</p>
+    <p>প্রতিটি অধ্যায় সাজানো হয়েছে বোর্ড সিলেবাস অনুযায়ী, যাতে শিক্ষার্থীরা স্কুল পরীক্ষার পাশাপাশি বোর্ড পরীক্ষার জন্যও প্রস্তুত হতে পারে।</p>
+  </section>
+
+  <section>
+    <h2>🎯 আমাদের লক্ষ্য</h2>
+    <p>আমাদের মূল লক্ষ্য হলো প্রত্যন্ত অঞ্চলের শিক্ষার্থীদের কাছেও সহজভাবে মানসম্মত শিক্ষা পৌঁছে দেওয়া। আমরা চাই প্রতিটি শিক্ষার্থী ডিজিটালভাবে শেখার আনন্দ উপভোগ করুক এবং নিজের সময় মতো অনুশীলন করতে পারুক।</p>
+    <ul>
+      <li>✅ সম্পূর্ণ ফ্রি এবং বিজ্ঞাপনবিহীন শিক্ষা ব্যবস্থা</li>
+      <li>✅ প্রতিটি চ্যাপ্টারে ভিডিও, কুইজ ও নোটস</li>
+      <li>✅ এক্সাম প্র্যাকটিস ও রিয়েল টাইম রেজাল্ট</li>
+      <li>✅ নিয়মিত আপডেট ও নতুন কনটেন্ট</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>💡 Tiba Education-এর বৈশিষ্ট্য</h2>
+    <p>আমরা বিশ্বাস করি প্রযুক্তির মাধ্যমে শেখা আরও সহজ ও আকর্ষণীয় করা যায়। তাই প্রতিটি বিষয় আমরা ইন্টারঅ্যাকটিভভাবে উপস্থাপন করি।</p>
+    <ol>
+      <li>📘 ভিডিও লেকচার এবং ব্যাখ্যামূলক নোট</li>
+      <li>🧮 প্র্যাকটিস কুইজ সিস্টেম</li>
+      <li>🧑‍🏫 শিক্ষক ও শিক্ষার্থী ফিডব্যাক সাপোর্ট</li>
+      <li>📱 মোবাইল ফ্রেন্ডলি রেসপনসিভ ডিজাইন</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>⭐ শিক্ষার্থীদের মতামত</h2>
+    <p><strong>আদনান রহমান (ক্লাস ৯):</strong> "Tiba Education আমার জন্য সত্যিকারের গাইড। এখানকার নোট আর কুইজ আমাকে বোর্ড পরীক্ষায় অনেক সাহায্য করেছে।"</p>
+    <p><strong>সাদিয়া ইসলাম (ক্লাস ৮):</strong> "ভিডিওগুলো খুব সুন্দরভাবে ব্যাখ্যা করা হয়। Dark mode ব্যবহার করতে খুব ভালো লাগে!"</p>
+    <p><strong>রাশেদুল করিম (ক্লাস ১০):</strong> "এই ওয়েবসাইটটা আমার সেকেন্ড স্কুলের মতো হয়ে গেছে।"</p>
+  </section>
+
+  <section>
+    <h2>🚀 ভবিষ্যৎ পরিকল্পনা</h2>
+    <p>Tiba Education ভবিষ্যতে আরও নতুন ফিচার আনবে, যেমন —</p>
+    <ul>
+      <li>🎥 লাইভ ক্লাস ও ইন্টারঅ্যাকটিভ লার্নিং</li>
+      <li>💬 শিক্ষক-শিক্ষার্থী চ্যাট সিস্টেম</li>
+      <li>📈 প্রগ্রেস ট্র্যাকিং ও রিপোর্ট কার্ড</li>
+      <li>📚 Admission প্রস্তুতির জন্য বিশেষ সেকশন</li>
+    </ul>
+  </section>
+ 
+  <!-- Footer -->
+  <footer id="contact">
+    <p>📧 যোগাযোগ: <a href="mailto:tirthochakroborty04@gmail.com">tirthochakroborty04@gmail.com</a></p>
+    <p>📞 মোবাইল: 01304218750</p>
+    <p>🌐 ফেসবুক: <a href="https://facebook.com/TibaEducation">facebook.com/TibaEducation</a></p>
+    <p style="margin-top: 10px;">© 2025 <strong>Tiba Education</strong> — সমস্ত অধিকার সংরক্ষিত।</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+
+
+
+
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnG7WhZTCHPvz2sqS4KkPmZFOX9XxpttQ",
+        authDomain: "private-chat-550ab.firebaseapp.com",
+        databaseURL: "https://private-chat-550ab-default-rtdb.firebaseio.com",
+        projectId: "private-chat-550ab",
+        storageBucket: "private-chat-550ab.firebasestorage.app",
+        messagingSenderId: "108768473913",
+        appId: "1:108768473913:web:a57cc49c0103f57467eee8",
+        measurementId: "G-YJRLY8TXMT"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Auth Protection
+    auth.onAuthStateChanged((user) => {
+        if (!user) {
+            window.location.href = 'class11-12/login.html';
+        }
+    });
+
+    // Logout function
+    function logout() {
+        auth.signOut().then(() => {
+            // Redirect happens automatically
+        });
+    }
+
+
+
+    function toggleMenu() {
+      const menu = document.getElementById('menu');
+      const hamburger = document.getElementById('hamburgerBtn');
+      menu.classList.toggle('show');
+      hamburger.textContent = menu.classList.contains('show') ? '✖' : '☰';
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      const btn = document.getElementById('darkToggleBtn');
+      const isDark = document.body.classList.contains('dark');
+      btn.textContent = isDark ? '🌙 Dark Mode: ON' : '🌙 Dark Mode: OFF';
+    }
+    
+    
+    
+    
+    
+  </script>
+
+</body>
+</html>
